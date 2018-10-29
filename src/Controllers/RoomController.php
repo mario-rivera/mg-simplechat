@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
 use Dwoo\Core as DwooCore;
 use App\Chat\Room;
+use App\Chat\User;
 
 class RoomController{
 
@@ -16,6 +17,7 @@ class RoomController{
 
 		$this->container = $c;
 		$this->room = $this->container->{Room::class};
+		$this->room->setUser($this->container->{User::class});
 	}
 
 	public function getChatroom(Request $request, Response $response, $args){

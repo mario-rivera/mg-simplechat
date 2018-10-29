@@ -5,7 +5,6 @@ use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 use Psr\Container\ContainerInterface;
 use App\Chat\User;
-use App\Chat\Room;
 
 class Authenticated
 {
@@ -19,11 +18,12 @@ class Authenticated
 	public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
 	{
 
-		$room = $this->container[Room::class];
+		$uri_path = ltrim( parse_url($request->getUri(), PHP_URL_PATH), '/');
+		$room_name = explode('/', $uri_path)[1];
 
 		if(!isset($_SESSION['username'])){
 
-			return $response->withHeader('Location', "/room/{$room->getId()}/login")->withStatus(302);
+			return $response->withHeader('Location', "/room/{$room_name}/login")->withStatus(302);
 		}
 
 		$user = new User();
@@ -34,7 +34,7 @@ class Authenticated
 			$user->setLevel('admin');
 		}
 
-		$room->setUser($user);
+		$this->container[User::class] = $user;
 
 		$response = $next($request, $response);
 		return $response;

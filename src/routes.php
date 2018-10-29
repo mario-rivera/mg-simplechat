@@ -15,3 +15,7 @@ $app->group('', function() use ($app){
 })
 ->add(App\Middleware\Authenticated::class)
 ->add(App\Middleware\RoomInit::class);
+
+$app->post('/admin/message', App\Controllers\AdminMessageController::class . ':postMessage')
+->add(App\Middleware\AdminFilter::class)
+->add(App\Middleware\Authenticated::class);

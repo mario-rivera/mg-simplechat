@@ -66,7 +66,7 @@ destroy(){
 
     down
     docker network rm $NETNAME
-    # docker rmi $PHP_IMAGE
+    docker rmi $PHP_IMAGE
 }
 
 $1
